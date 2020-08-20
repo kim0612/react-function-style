@@ -3,19 +3,35 @@ import './App.css';
 
 
 function App() {
+  let [funcShow, setFuncShow] = useState(true);
+  let [classShow , setClassShow] = useState(true);
+
   return (
     <div className="container">
       <h1>Functional style vs Class style</h1>
-      <FuncComp number={7}></FuncComp>
-      <ClassComp number={9}></ClassComp>
+      <input type="button" 
+        value={ funcShow ? "remove func" : "make func"} 
+        onClick={function(){
+          setFuncShow( funcShow ? false : true );
+        }}
+      />
+      <input type="button" 
+        value={ classShow ? "remove class" : "make class"}
+        onClick={function(){
+          setClassShow( classShow ? false : true );
+        }}
+      />
+      <hr style={{ backgroundColor: "black", height: "3px" }}/>
+      {funcShow ? <FuncComp number={7}></FuncComp> : null}
+      {classShow ? <ClassComp number={9}></ClassComp> : null}
     </div>
   );
 }
 
+
 let classStyle = 'color:red';
 let funcStyle = 'color:blue';
 let funcId = 0;
-
 
 function FuncComp(props){
   let [_num, setNumber] = useState(props.number);
@@ -24,7 +40,6 @@ function FuncComp(props){
   // componentDidMount, componentWillUnMount
   useEffect(function(){
     console.log('%cfunc => useEffect (componentDidMount) '+(++funcId), funcStyle);
-    document.title = _num;
     return function(){
       console.log('%cfunc => useEffect return (componentWillUnMount) '+(++funcId), funcStyle);
     }
@@ -81,9 +96,6 @@ class ClassComp extends Component{
   }
 
   // Class Component의 LifeCycle 이해하기
-  componentWillMount(){
-    console.log('%cclass => componentWillMount', classStyle);
-  }
   componentDidMount(){
     console.log('%cclass => componentDidMount', classStyle);
   }
@@ -91,11 +103,11 @@ class ClassComp extends Component{
     console.log('%cclass => shouldComponentUpdate', classStyle);
     return true;
   }
-  componentWillUpdate(nextProps, nextState){
-    console.log('%cclass => componentWillUpdate', classStyle);
-  }
   componentDidUpdate(nextProps, nextState){
     console.log('%cclass => componentDidUpdate', classStyle);
+  }
+  componentWillUnmount(){
+    console.log('%cclass => componentWillUnMount', classStyle);
   }
 
   render(){
